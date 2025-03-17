@@ -23,6 +23,8 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <stdlib.h>
+#include "keyschedule.h"
+#include "utils.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,6 +103,44 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   printf("test\n");
+  uint8_t roundkey[11][4][4];
+    for(int i = 0; i<10; i++){
+  	  for (int j = 0; j<10; i++){
+  		  roundkey[0][i][j] = cipher_key[i][j];
+  	  }
+    }
+    uint8_t prev_key[4][4];
+    uint8_t next_key[4][4];
+    for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                prev_key[i][j] = cipher_key[i][j];
+            }
+        }
+
+    for(int i = 0; i<10;i++){
+  	  addRound(prev_key, i, next_key);
+  	  for (int j = 0; j < 4; j++) {
+  		  for (int k = 0; k < 4; k++) {
+  			  roundkey[i][j][k] = next_key[j][k];
+  		  }
+  	  }
+  	  for (int i = 0; i < 4; i++) {
+  		  for (int j = 0; j < 4; j++) {
+  			  prev_key[i][j] = next_key[i][j];
+  		  }
+  	  }
+    }
+
+//    for (int round = 0; round < 10; round++) {
+//            printf("Clé AES-128 - Round %d:\n", round + 1);
+//            for (int i = 0; i < 4; i++) {
+//                for (int j = 0; j < 4; j++) {
+//                    printf("%02X ", roundkey[round][i][j]);
+//                }
+//                printf("\n");
+//            }
+//            printf("\n");
+//        }
   while (1)
   {
     /* USER CODE END WHILE */
