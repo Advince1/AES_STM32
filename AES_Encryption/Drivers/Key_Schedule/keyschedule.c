@@ -28,13 +28,12 @@ void addRound(uint8_t previous_key[4][4], int round, uint8_t new_key[4][4]) {
     new_key[0][2] = previous_key[3][3];
     new_key[0][3] = previous_key[3][0];
 
-
     for (int i = 0; i < 4; i++) {
     	new_key[0][i] = getSubstitution(s_box,new_key[0][i]);
     }
 
     for (int i = 0; i < 4; i++) {
-    	new_key[0][i] = new_key[0][i] ^ Rcon[round][i] ^ previous_key[0][i];
+    	new_key[0][i] = new_key[0][i] ^ Rcon[round-1][i] ^ previous_key[0][i];
     }
 
     for (int i = 1; i < 4; i++) {
