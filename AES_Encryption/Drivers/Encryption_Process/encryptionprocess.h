@@ -19,5 +19,8 @@ void saveMatrix(uint8_t matrix[MATRIX_SIZE][MATRIX_SIZE], uint8_t temp[MATRIX_SI
 uint8_t gmul(uint8_t a, uint8_t b);
 void mixColumns(uint8_t state[MATRIX_SIZE][MATRIX_SIZE]);
 void addRoundKey(uint8_t state[MATRIX_SIZE][MATRIX_SIZE], uint8_t key[MATRIX_SIZE][MATRIX_SIZE]);
+void AesEncryption(uint8_t roundkey[11][4][4], uint8_t data[4][4]);
+void getData(uint8_t data[4][4]);
+void readData(uint8_t data[4][4]);
 
 #endif /* ENCRYPTION_PROCESS_ENCRYPTIONPROCESS_H_ */

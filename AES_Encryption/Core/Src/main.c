@@ -103,71 +103,14 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint8_t roundkey[11][4][4];
-    for(int i = 0; i<4; i++){
-  	  for (int j = 0; j<4; j++){
-  		  roundkey[0][i][j] = cipher_key[i][j];
-  	  }
-    }
+  uint8_t data[4][4];
 
-    uint8_t prev_key[4][4];
-    uint8_t next_key[4][4];
-    for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                prev_key[i][j] = cipher_key[i][j];
-            }
-        }
+  getRoundKey(roundkey);
+  getData(data);
+  readData(data);
+  AesEncryption(roundkey, data);
+  readData(data);
 
-    for(int i = 1; i<11;i++){
-  	  addRound(prev_key, i, next_key);
-  	  for (int j = 0; j < 4; j++) {
-  		  for (int k = 0; k < 4; k++) {
-  			  roundkey[i][j][k] = next_key[j][k];
-  		  }
-  	  }
-  	  for (int i = 0; i < 4; i++) {
-  		  for (int j = 0; j < 4; j++) {
-  			  prev_key[i][j] = next_key[i][j];
-  		  }
-  	  }
-
-    }
-
-    addRoundKey(matrix_test, roundkey[0]);
-    uint8_t test[4][4];
-    for (int i = 0; i < 4; i++) {
-    		for (int j = 0; j < 4; j++) {
-    			test[i][j] = matrix_test[i][j];
-    	}
-    }
-
-
-    for (int a = 0; a < 9; a++) {
-    	for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				test[i][j] = getSubstitution(s_box, test[i][j]);
-			}
-		}
-    	shiftRows(test);
-    	mixColumns(test);
-    	addRoundKey(test, roundkey[a+1]);
-
-    }
-    for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			test[i][j] = getSubstitution(s_box, test[i][j]);
-		}
-	}
-    shiftRows(test);
-	addRoundKey(test, roundkey[10]);
-
-
-	printf("Result\n");
-	for (int i = 0; i < 4; i++) {
-	   for (int j = 0; j < 4; j++) {
-		   printf("%02X ", test[i][j]);
-	   }
-		printf("\n");
-	}
   while (1)
   {
     /* USER CODE END WHILE */

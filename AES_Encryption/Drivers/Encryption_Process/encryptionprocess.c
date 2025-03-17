@@ -85,3 +85,37 @@ void addRoundKey(uint8_t state[MATRIX_SIZE][MATRIX_SIZE], uint8_t key[MATRIX_SIZ
         }
     }
 }
+
+void getData(uint8_t data[4][4]){
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			data[i][j] = matrix_test[i][j];
+		}
+	}
+}
+
+void readData(uint8_t data[4][4]){
+	printf("Data :\n");
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			printf("%02X ", data[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+void AesEncryption(uint8_t roundkey[11][4][4], uint8_t data[4][4]){
+	addRoundKey(data, roundkey[0]);
+	for (int a = 0; a < 10; a++) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				data[i][j] = getSubstitution(s_box, data[i][j]);
+			}
+		}
+		shiftRows(data);
+		if(a != 9 ){
+			mixColumns(data);
+		}
+		addRoundKey(data, roundkey[a+1]);
+	}
+}
