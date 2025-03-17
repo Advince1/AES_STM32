@@ -104,11 +104,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   printf("test\n");
   uint8_t roundkey[11][4][4];
-    for(int i = 0; i<10; i++){
-  	  for (int j = 0; j<10; i++){
+    for(int i = 0; i<4; i++){
+  	  for (int j = 0; j<4; i++){
   		  roundkey[0][i][j] = cipher_key[i][j];
   	  }
     }
+    printf("Cypher \n");
+        for (int i = 0; i < 4; i++) {
+        	   for (int j = 0; j < 4; j++) {
+        		   printf("%02X ", cipher_key[i][j]);
+        	   }
+        		printf("\n");
+        	}
+
+
     uint8_t prev_key[4][4];
     uint8_t next_key[4][4];
     for (int i = 0; i < 4; i++) {
@@ -117,7 +126,7 @@ int main(void)
             }
         }
 
-    for(int i = 0; i<10;i++){
+    for(int i = 1; i<11;i++){
   	  addRound(prev_key, i, next_key);
   	  for (int j = 0; j < 4; j++) {
   		  for (int k = 0; k < 4; k++) {
@@ -129,7 +138,100 @@ int main(void)
   			  prev_key[i][j] = next_key[i][j];
   		  }
   	  }
+    }/*
+
+
+    // etape 1 Subbytes
+
+    uint8_t test[4][4];
+
+    for (int i = 0; i < 4; i++) {
+    	for (int j = 0; j < 4; j++) {
+    		test[i][j] = getSubstitution(s_box, matrix_test[i][j]);
+    	}
     }
+
+    // etape 2 shiftrows
+
+    shiftRows(test);
+
+    // etape 3 : Mix columns
+
+    mixColumns(test);
+
+    // etape 4 : Mix columns
+
+    addRoundKey(test, roundkey[1]);
+
+    // Print
+
+    for (int i = 0; i < 4; i++) {
+	   for (int j = 0; j < 4; j++) {
+		   printf("%02X ", test[i][j]);
+	   }
+		printf("\n");
+	}
+    */
+
+    printf("Init \n");
+       for (int i = 0; i < 4; i++) {
+       	   for (int j = 0; j < 4; j++) {
+       		   printf("%02X ", matrix_test[i][j]);
+       	   }
+       		printf("\n");
+       	}
+
+    addRoundKey(matrix_test, roundkey[0]);
+    uint8_t test[4][4];
+
+
+
+    printf("Cypher \n");
+    for (int i = 0; i < 4; i++) {
+    	   for (int j = 0; j < 4; j++) {
+    		   printf("%02X ", roundkey[0][i][j]);
+    	   }
+    		printf("\n");
+    	}
+
+
+    for (int a = 0; a < 9; a++) {
+    	for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				test[i][j] = getSubstitution(s_box, test[i][j]);
+			}
+		}
+    	shiftRows(test);
+    	mixColumns(test);
+    	addRoundKey(test, roundkey[a+1]);
+
+//    	printf("ROund %d\n",a);
+//    	for (int i = 0; i < 4; i++) {
+//    		   for (int j = 0; j < 4; j++) {
+//    			   printf("%02X ", test[i][j]);
+//    		   }
+//    			printf("\n");
+//    		}
+
+    }
+
+    for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			test[i][j] = getSubstitution(s_box, test[i][j]);
+		}
+	}
+    shiftRows(test);
+	addRoundKey(test, roundkey[10]);
+
+	/*
+	for (int i = 0; i < 4; i++) {
+	   for (int j = 0; j < 4; j++) {
+		   printf("%02X ", test[i][j]);
+	   }
+		printf("\n");
+	}*/
+
+
 
 //    for (int round = 0; round < 10; round++) {
 //            printf("Clé AES-128 - Round %d:\n", round + 1);

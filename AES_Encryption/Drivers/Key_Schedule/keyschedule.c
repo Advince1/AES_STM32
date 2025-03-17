@@ -22,24 +22,16 @@ void addRound(uint8_t previous_key[4][4], int round, uint8_t new_key[4][4]) {
         }
     }
 
-    for (int i = 0; i < 4; i++) {
-       printf("Avant calcul : %02X \n", previous_key[3][i]);
-     }
 
     new_key[0][0] = previous_key[3][1];
     new_key[0][1] = previous_key[3][2];
     new_key[0][2] = previous_key[3][3];
     new_key[0][3] = previous_key[3][0];
 
-    for (int i = 0; i < 4; i++) {
-           printf("Après calcul : %02X \n", new_key[0][i]);
-         }
 
     for (int i = 0; i < 4; i++) {
     	new_key[0][i] = getSubstitution(s_box,new_key[0][i]);
-    	printf("%02X ", new_key[0][i]);
     }
-    printf("//\n");
 
     for (int i = 0; i < 4; i++) {
     	new_key[0][i] = new_key[0][i] ^ Rcon[round][i] ^ previous_key[0][i];
