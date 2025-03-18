@@ -110,6 +110,8 @@ int main(void)
   readData(data);
   AesEncryption(roundkey, data);
   readData(data);
+  AesDecryption(roundkey, data);
+  readData(data);
 
   while (1)
   {
