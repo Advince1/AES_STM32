@@ -12,7 +12,7 @@
 void printMatrix(uint8_t matrix[MATRIX_SIZE][MATRIX_SIZE]) {
     for (int i = 0; i < MATRIX_SIZE; i++) {
         for (int j = 0; j < MATRIX_SIZE; j++) {
-            printf("%02X ", matrix[i][j]);  // Correction : affichage en hexadécimal
+            printf("%02X ", matrix[j][i]);  // Correction : affichage en hexadécimal
         }
         printf("\n");
     }
@@ -86,36 +86,47 @@ void addRoundKey(uint8_t state[MATRIX_SIZE][MATRIX_SIZE], uint8_t key[MATRIX_SIZ
     }
 }
 
-void getData(uint8_t data[4][4]){
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			data[i][j] = matrix_test[i][j];
-		}
+void readData(uint8_t data[16]){
+	printf("Data : ");
+	for (int i = 0; i < 16; i++) {
+		printf("%02X ", data[i]);
 	}
+	printf("\n");
 }
 
-void readData(uint8_t data[4][4]){
-	printf("Data :\n");
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			printf("%02X ", data[i][j]);
-		}
-		printf("\n");
-	}
-}
+void AesEncryption(uint8_t cypherkey[16], uint8_t data[16]){
 
-void AesEncryption(uint8_t roundkey[11][4][4], uint8_t data[4][4]){
-	addRoundKey(data, roundkey[0]);
+	uint8_t matrix_cypherkey[4][4];
+	uint8_t matrix_data[4][4];
+
+	for(int i = 0; i < 4; i++){
+		for(int j = 0; j<4; j++){
+			matrix_cypherkey[i][j] = cypherkey[4*i+j];
+			matrix_data[i][j] = data[4*i+j];
+		}
+	}
+
+
+	uint8_t roundkey[11][4][4];
+	getRoundKey(matrix_cypherkey, roundkey);
+	addRoundKey(matrix_data, roundkey[0]);
 	for (int a = 0; a < 10; a++) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				data[i][j] = getSubstitution(s_box, data[i][j]);
+				matrix_data[i][j] = getSubstitution(s_box, matrix_data[i][j]);
 			}
 		}
-		shiftRows(data);
+		shiftRows(matrix_data);
 		if(a != 9 ){
-			mixColumns(data);
+			mixColumns(matrix_data);
 		}
-		addRoundKey(data, roundkey[a+1]);
+		addRoundKey(matrix_data, roundkey[a+1]);
+	}
+
+	for(int i = 0; i < 4; i++){
+		for(int j = 0; j<4; j++){
+			cypherkey[4*i+j] = matrix_cypherkey[i][j];
+			data[4*i+j] = matrix_data[i][j];
+		}
 	}
 }

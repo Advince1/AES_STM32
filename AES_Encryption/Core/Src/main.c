@@ -21,10 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdio.h>
-#include <stdlib.h>
-#include "keyschedule.h"
-#include "utils.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -102,16 +99,44 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t roundkey[11][4][4];
-  uint8_t data[4][4];
 
-  getRoundKey(roundkey);
-  getData(data);
+//  uint8_t cypherkey[16] = {
+//      0x2b, 0x7e, 0x15, 0x16,
+//      0x28, 0xae, 0xd2, 0xa6,
+//      0xab, 0xf7, 0x15, 0x88,
+//      0x09, 0xcf, 0x4f, 0x3c
+//  };
+//
+//  uint8_t data[16] = {
+//      0x32, 0x43, 0xf6, 0xa8,
+//      0x88, 0x5a, 0x30, 0x8d,
+//      0x31, 0x31, 0x98, 0xa2,
+//      0xe0, 0x37, 0x07, 0x34
+//  };
+
+  uint8_t cypherkey[16] = {
+      0xc0, 0x53, 0x8e, 0x14,
+      0x77, 0x1d, 0x64, 0x98,
+      0x2f, 0xb3, 0xe1, 0x0a,
+      0xdd, 0x4a, 0x79, 0x65
+  };
+
+  uint8_t data[16] = {
+      0x8a, 0x4c, 0xb2, 0xe9,
+      0x11, 0x57, 0xf0, 0x33,
+      0x9e, 0x05, 0xd6, 0x7a,
+      0x6f, 0x2c, 0x01, 0xb8
+  };
+
   readData(data);
-  AesEncryption(roundkey, data);
+  AesEncryption(cypherkey, data);
   readData(data);
-  AesDecryption(roundkey, data);
+  AesDecryption(cypherkey, data);
   readData(data);
+
+  TestRoundKey();
+  TestAesEncryption();
+  TestAesDecryption();
 
   while (1)
   {

@@ -31,8 +31,13 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
+#include "utils.h"
 #include "keyschedule.h"
 #include "encryptionprocess.h"
+#include "decryptionprocess.h"
+#include "validation.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -43,10 +43,10 @@ void addRound(uint8_t previous_key[4][4], int round, uint8_t new_key[4][4]) {
     }
 }
 
-void getRoundKey(uint8_t roundkey[11][4][4]){
+void getRoundKey(uint8_t cypherkey[4][4],uint8_t roundkey[11][4][4]){
 	for(int i = 0; i<4; i++){
 	  	  for (int j = 0; j<4; j++){
-	  		  roundkey[0][i][j] = cipher_key[i][j];
+	  		  roundkey[0][i][j] = cypherkey[i][j];
 	  	  }
 	    }
 
@@ -54,7 +54,7 @@ void getRoundKey(uint8_t roundkey[11][4][4]){
 	    uint8_t next_key[4][4];
 	    for (int i = 0; i < 4; i++) {
 	            for (int j = 0; j < 4; j++) {
-	                prev_key[i][j] = cipher_key[i][j];
+	                prev_key[i][j] = cypherkey[i][j];
 	            }
 	        }
 

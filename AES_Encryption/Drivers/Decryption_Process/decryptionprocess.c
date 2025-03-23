@@ -6,7 +6,6 @@
  */
 
 #include "decryptionprocess.h"
-#include "utils.h"
 
 void invShiftRows(uint8_t state[MATRIX_SIZE][MATRIX_SIZE]) {
     uint8_t temp[MATRIX_SIZE][MATRIX_SIZE];
@@ -35,19 +34,39 @@ void invMixColumns(uint8_t state[MATRIX_SIZE][MATRIX_SIZE]) {
     }
 }
 
-void AesDecryption(uint8_t roundkey[11][4][4], uint8_t data[4][4]) {
-    addRoundKey(data, roundkey[10]);
+void AesDecryption(uint8_t cypherkey[16], uint8_t data[16]) {
+
+	uint8_t matrix_cypherkey[4][4];
+	uint8_t matrix_data[4][4];
+
+	for(int i = 0; i < 4; i++){
+		for(int j = 0; j<4; j++){
+			matrix_cypherkey[i][j] = cypherkey[4*i+j];
+			matrix_data[i][j] = data[4*i+j];
+		}
+	}
+
+	uint8_t roundkey[11][4][4];
+	getRoundKey(matrix_cypherkey, roundkey);
+    addRoundKey(matrix_data, roundkey[10]);
     for (int a = 9; a >= 0; a--) {
-        invShiftRows(data);
+        invShiftRows(matrix_data);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                data[i][j] = getSubstitution(inv_s_box, data[i][j]);
+                matrix_data[i][j] = getSubstitution(inv_s_box, matrix_data[i][j]);
             }
         }
-        addRoundKey(data, roundkey[a]);
+        addRoundKey(matrix_data, roundkey[a]);
         if (a != 0) {
-            invMixColumns(data);
+            invMixColumns(matrix_data);
         }
+    }
+
+    for(int i = 0; i < 4; i++){
+    	for(int j = 0; j<4; j++){
+    		cypherkey[4*i+j] = matrix_cypherkey[i][j];
+    		data[4*i+j] = matrix_data[i][j];
+    	}
     }
 }
 
